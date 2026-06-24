@@ -1,25 +1,22 @@
-// Spike/Drop strategy
-// Fires when price moves more than X% within a sliding window of Y simulated seconds
-
 const windows = new Map();
 
 function checkSpike(symbol, price, simTime, config) {
   const { thresholdPercent, windowSec } = config;
 
+  const windowTicks = Math.max(2, Math.ceil(windowSec / 30));
+
   if (!windows.has(symbol)) windows.set(symbol, []);
   const window = windows.get(symbol);
 
-  window.push({ price, simTs: simTime.getTime() });
+  window.push(price);
 
-  // Remove ticks older than the configured window
-  const cutoff = simTime.getTime() - windowSec * 1000;
-  while (window.length > 0 && window[0].simTs < cutoff) {
+    if (window.length > windowTicks) {
     window.shift();
   }
 
   if (window.length < 2) return null;
 
-  const oldestPrice = window[0].price;
+  const oldestPrice = window[0];
   const changePct = ((price - oldestPrice) / oldestPrice) * 100;
 
   if (Math.abs(changePct) >= thresholdPercent) {

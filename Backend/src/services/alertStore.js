@@ -8,12 +8,13 @@ const alerts = [];
 
 // Cooldown prevents the same symbol from spamming alerts within 30 real seconds
 const cooldowns = new Map();
-const COOLDOWN_MS = 30_000;
+const COOLDOWN_MS = 5_000;
 
 function addAlert({ symbol, timestamp, reason }) {
   const lastFired = cooldowns.get(symbol) || 0;
-  if (Date.now() - lastFired < COOLDOWN_MS) return null;
-  cooldowns.set(symbol, Date.now());
+  const now = Date.now();
+  if (now - lastFired < COOLDOWN_MS) return null;
+  cooldowns.set(symbol, now);
 
   const alert = {
     alertRef: `TV-${nanoid(5).toUpperCase()}`, // required field from the brief

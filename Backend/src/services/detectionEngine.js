@@ -5,10 +5,9 @@ const { addAlert } = require("./alertStore");
 const { parseTs } = require("../utils/parseTs");
 
 const warmingUp = new Map();
-
-// Burst arrives many ticks/sec — live ticks arrive every ~1.5s
-// Once 500ms passes with no tick, we consider the burst over
 const BURST_SILENCE_MS = 500;
+const LOG_EVERY_N_TICKS = 10;
+const tickCounters = new Map();
 
 function processTick(tick, realSymbol) {
   const config = getConfig();
@@ -37,6 +36,12 @@ function processTick(tick, realSymbol) {
   // Always feed data into the window so it's primed when live detection starts
   const reason = runStrategy(realSymbol, price, simTime, symbolConfig);
 
+  const count = (tickCounters.get(realSymbol) || 0) + 1;
+  tickCounters.set(realSymbol, count);
+  if (count % LOG_EVERY_N_TICKS === 0) {
+    console.log(`[Detection] ${realSymbol} | tick #${count} | ₹${price} | warm=${state.isWarm} | ${reason || "no anomaly"}`);
+  }
+
   if (state.isWarm && reason) {
     addAlert({ symbol: realSymbol, timestamp: tick.TS, reason });
   }
@@ -58,6 +63,7 @@ function resetSymbol(symbol) {
   resetSpike(symbol);
   resetMovingAverage(symbol);
   warmingUp.delete(symbol);
+  tickCounters.delete(symbol);
   console.log(`[Detection] State reset for ${symbol}`);
 }
 

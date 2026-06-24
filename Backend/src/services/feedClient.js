@@ -36,13 +36,35 @@ function connect() {
 
   socket.on("ticker", (tick) => {
     const symbol = tick.SYMBOL;
-    latestPrices.set(symbol, { price: tick.LTP, timestamp: tick.TS, volume: tick.TTQ });
-    feedEvents.emit("tick", tick);
-    processTick(tick, symbol);
+    const price = tick.CLOSE ?? tick.LTP ?? tick.ATP;
+
+    if (!symbol || price === undefined) {
+      console.warn("[Feed] Tick missing symbol or price:", JSON.stringify(tick));
+      return;
+    }
+
+    const normalisedTick = {
+      SYMBOL: symbol,
+      LTP: price,   
+      TS: tick.TS,
+      TTQ: tick.TTQ,
+      OPEN: tick.OPEN,
+      HIGH: tick.HIGH,
+      LOW: tick.LOW,
+      CLOSE: tick.CLOSE,
+    };
+
+    latestPrices.set(symbol, {
+      price: price,
+      timestamp: tick.TS,
+      volume: tick.TTQ,
+    });
+
+    feedEvents.emit("tick", normalisedTick);
+    processTick(normalisedTick, symbol);
   });
 }
 
-// Per API docs — subscribe overwrites the prior list, so always send all symbols at once
 function subscribeToSymbols() {
   const symbols = Object.keys(getConfig());
   if (!symbols.length) {
