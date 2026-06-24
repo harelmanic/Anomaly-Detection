@@ -1,17 +1,17 @@
 {
   "RELIANCE": {
     "strategy": "spike",
-    "thresholdPercent": 3,
+    "thresholdPercent": 1,
     "windowSec": 30
   },
   "TCS": {
     "strategy": "movingAverage",
-    "deviationPercent": 5,
+    "deviationPercent": 1,
     "sampleSize": 10
   },
   "ITC": {
     "strategy": "spike",
-    "thresholdPercent": 2,
+    "thresholdPercent": 1,
     "windowSec": 60
   }
 }
