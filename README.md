@@ -230,7 +230,17 @@ Real alerts captured during local testing:
 ]
 ```
 
-**Initial burst observation**: When subscribing to RELIANCE, approximately **280–340 ticks** arrived in the first 2–3 seconds before the feed settled into live cadence (~1 tick per 1.5 real seconds).
+**Initial burst observation**: When I first subscribed to all three symbols simultaneously, each received approximately **293–295 ticks** in the first 2–3 seconds before the feed settled into live cadence (~1 tick per 1.5 real seconds):
+
+- `RELIANCE` — 294 ticks in the burst
+- `TCS` — 294 ticks in the burst  
+- `ITC` — 295 ticks in the burst
+
+{"alertRef":"TV-WV-XU","symbol":"RELIANCE","timestamp":"2026-06-25 12:44:00+05:30","reason":"Price spike of 0.62% detected within 300s window (from 1439.10 to 1448.00)","createdAt":"2026-06-24T20:11:14.780Z"}
+{"alertRef":"TV-CZ6FX","symbol":"RELIANCE","timestamp":"2026-06-25 12:42:00+05:30","reason":"Price spike of 0.56% detected within 300s window (from 1439.90 to 1447.90)","createdAt":"2026-06-24T20:11:08.779Z"}
+{"alertRef":"TV-BI_KN","symbol":"RELIANCE","timestamp":"2026-06-25 12:40:00+05:30","reason":"Price spike of 0.52% detected within 300s window (from 1440.50 to 1448.00)","createdAt":"2026-06-24T20:11:02.781Z"}
+{"alertRef":"TV-FV7AA","symbol":"ITC","timestamp":"2026-06-25 09:24:00+05:30","reason":"Price spike of 0.78% detected within 300s window (from 307.55 to 309.95)","createdAt":"2026-06-24T20:01:14.543Z"}
+{"alertRef":"TV-FV7AA","symbol":"ITC","timestamp":"2026-06-25 09:24:00+05:30","reason":"Price spike of 0.78% detected within 300s window (from 307.55 to 309.95)","createdAt":"2026-06-24T20:01:14.543Z"}
 
 ---
 

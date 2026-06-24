@@ -34,8 +34,13 @@ function connect() {
     console.error("[Feed] Connection error:", err.message);
   });
 
+  const burstCount = new Map();
   socket.on("ticker", (tick) => {
     const symbol = tick.SYMBOL;
+    // Temporary: count burst ticks per symbol
+    burstCount.set(symbol, (burstCount.get(symbol) || 0) + 1);
+    console.log(`[Feed] ${symbol} tick #${burstCount.get(symbol)}`);
+
     const price = tick.CLOSE ?? tick.LTP ?? tick.ATP;
 
     if (!symbol || price === undefined) {
@@ -45,7 +50,7 @@ function connect() {
 
     const normalisedTick = {
       SYMBOL: symbol,
-      LTP: price,   
+      LTP: price,
       TS: tick.TS,
       TTQ: tick.TTQ,
       OPEN: tick.OPEN,
